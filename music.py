@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#!/coding:utf-8
+#coding:utf-8
 
 # import
 import os
@@ -8,66 +8,64 @@ import time
 import sys
 from mutagen.mp3 import MP3
 
-filepath = 'path.txt'
-musicdir = 'Music'
+# path_import
+def pathimport():
+    filepath = 'path.txt'
+    return filepath
 
-# path
-if os.path.exists(filepath):
-    print "Path file [OK]"
-else :
-    print "Path file [NO]"
-    print "Please make a path.txt file"
-    print "Please write absolute path to music in the path.txt"
-    exit()
 
-if os.path.exists(filepath):
-    print "Music directory [OK]"
-else :
-    print "Music directory [NO]"
-    print "Please make a `Music` directory"
-    exit()
+def music_import():
+    musicdir = 'Music'
+    return musicdir
 
-path = open('path.txt', 'r')
 
-for musicpath in path:
-    print "Music file path =",
-    print musicpath
+def filepath():
+    path = open('path.txt', 'r')
 
-path.close()
+    for musicpath in path:
+        # print "Music file path =",
+        # print musicpath
+        musicpath
 
-musicpath = musicpath.rstrip("\n")
+    path.close()
 
-# start
-print "-- pyMusic-CUI --"
-print "*** MUSIC LIST***"
-print ""
+    musicpath = musicpath.rstrip("\n")
 
-# file list
-files = os.listdir(musicpath)
+    return musicpath
 
-for file in files:
-    print file
 
-print ""
-print "music select"
-print "=>",
+def musiclist():
+    print "-- pyMusic-CUI --"
+    print "*** MUSIC LIST ***"
+    print ""
 
-## select music
-select = raw_input()
-selectmusic = musicpath + select
+    files = os.listdir(filepath())
 
-audio = MP3(selectmusic)
+    for file in files:
+        print file
 
+
+def music_select():
+    print ""
+    print "music select"
+    print "=>",
+
+    select = raw_input()
+    selectmusic = filepath() + select
+
+    return selectmusic
+
+
+musiclist()
+audio = music_select()
+audio_len = MP3(audio)
 pygame.mixer.init()
-pygame.mixer.music.load(selectmusic)
+pygame.mixer.music.load(audio)
 pygame.mixer.music.play(1)
 
-print "---"+select+"---"
-print ""
-print "音量:%s" %pygame.mixer.music.get_volume()
-#print "音声時間:%s[ms]" %pygame.mixer.music.get_busy()
-#print "再生時間:"+audio.info.length
+print "--- play music ---"
 
-time.sleep(audio.info.length)
+time.sleep(audio_len.info.length)
 pygame.mixer.music.stop()
-print "終了"
+
+print "---end---"
